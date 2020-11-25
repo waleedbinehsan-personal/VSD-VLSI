@@ -34,24 +34,33 @@ Sky130 PDK is an open-source PDK (Process Design Kit) by SkyWater and Google thi
 Open up OpenLANE on your personal machine or on *Lab Instance*.
 If you are on your personal machine you need to go into docker by using the following command:
 
-
-> sudo docker run -it -v $(pwd):/openLANE_flow -v $PDK_ROOT:$PDK_ROOT -e PDK_ROOT=$PDK_ROOT -u $(id -u $USER):$(id -g $USER) openlane:rc4
+```
+    sudo docker run -it -v $(pwd):/openLANE_flow -v $PDK_ROOT:$PDK_ROOT -e PDK_ROOT=$PDK_ROOT -u $(id -u $USER):$(id -g $USER) openlane:rc4
+```
 
 Once in the docker make sure you are in the right directory then, go to interactive mode by using the following command
 
-> ./flow.tcl -interactive
+```
+    ./flow.tcl -interactive
+```
 
 Include the package by using the following command
 
-> package require openlane 0.9
+```
+    package require openlane 0.9
+```
 
 After that you need to prepare your design files. In my case the design name was picorv32a the command I wrote was
 
-> prep -design ./designs/picorv32a
+```
+    prep -design ./designs/picorv32a
+```
 
 After when the design is prepared run syntheis by using the following command
 
-> run_synthesis
+```
+    run_synthesis
+```
 
 And I got the results as shown below.
 ![My day-1 lab results](./Images/day1_lab.png)
