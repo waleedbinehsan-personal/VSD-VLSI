@@ -7,6 +7,16 @@
 * Introduction OpenLANE
 * Sky130 PDK
 
+### Day 2:
+* Core concepts of floor planing
+    * Utilization factor and aspect ratio
+    * Power Planning
+    * Macro's wire and capacitance estimation
+    * Floor Planning
+    * Need of libraries and characterization
+    * Congestion aware placement
+
+
 ___
 ## Day 1:
 * RISCV is an open-source ISA by UC-Berkley
@@ -65,3 +75,39 @@ After when the design is prepared run syntheis by using the following command
 And I got the results as shown below.
 ![My day-1 lab results](./Images/day1_lab.png)
 
+---
+
+## Day 2:
+### Utilization factor
+ It's the number of cells used by the design divided by
+ the total number of cells availabe on the core. For example if you have a utilization factor of 1, that means we are using the complete core. In a typical design the utilization factor is about 0.65-0.75
+
+ ### Aspect ratio
+ Its the width of the core to the length of the core. This factor basically tells what is the shape of the core. For example if aspect ratio of the core is 1, that means the core is square shaped
+
+ ### Power planing
+ Power planning is an extremely import step in floor planning. If we have poor power planning when a array of gates try to go from 0-1 they draw too much current from the source. This causes a voltage drop of the source voltage. Similarly when the array is chaning from 1-0 they release this charge causing the source voltage to rise. One way to tackle this problem is by decoupling capacitors.
+* We connect a capacitor in parallel from to a bigger combinatorial block this decouples the hardware from the source. Hence the name decoupling capacitor
+    * When there is a high demand the capacitor provides this voltage
+    * When there is a release of charge these capacitors take that charge keeping the noise in the voltage source as minimum as possible
+
+These huge chunk of blocks are using quite alot in the design. So, we make then into macro's.
+
+But when multiple macro's are connected together the inter-connect also need to supply voltage. This is done by having a grid of voltage and ground placed across the core, as shown in the fig.
+![Power grid](./Images/power-grid.jpg)
+
+### Floor placement:
+In order to place the standard cells at their respective place. We need to run placement on the synthesised design.
+This can be done by the following command
+```
+run_placement
+```
+After placment a def-file is made in the floor plan directory.
+This can be opened using magic by the following command.
+```
+magic -T <Tech file path> lef read <LEF file path> def read <DEF file path>
+```
+The view after running opening the def in magic is as follows
+![layout view of post palcement](./Images/post-layout.png)
+
+There are multiple types of timings that a circuit needs to hold, these timing information is covered in .lib file.
