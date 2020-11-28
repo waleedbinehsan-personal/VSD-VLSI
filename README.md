@@ -16,6 +16,12 @@
     * Need of libraries and characterization
     * Congestion aware placement
 
+### Day 3:
+* Making a custom invertor and Plugging it into the OpenLANE environment
+    * Making an Invertor
+    * Doing Spice simulation to chek if the invertor is make properly
+    * Pluging the invertor into OpenLANE flow
+
 
 ___
 ## Day 1:
@@ -111,3 +117,43 @@ The view after running opening the def in magic is as follows
 ![layout view of post palcement](./Images/post-layout.png)
 
 There are multiple types of timings that a circuit needs to hold, these timing information is covered in .lib file.
+
+## Day 3:
+First of all clone the design from git onto your system, by using the following command
+```
+git clone https://github.com/nickson-jose/vsdstdcelldesign.git
+```
+You will have the following files in your directory
+* sky130_inv.mag
+* libs directory
+
+Open up your terminal and run magic with the required tech file in the libs directory.
+
+This can be done by using the following command
+```
+magic -T /libs/sky130A.tech sky130_inv.mag
+```
+
+In the magic you will have a view such as following.
+![inverter in magic](./Images/inv.png)
+
+Next you would need to change the extract an ext from the layout, use the following command
+```
+extract all
+```
+
+After that remove all the parasatics and get a .spice file this can be done by the following command in the tkcon-window.
+```
+ext2spice cthresh 0 rthresh 0
+ext2spice
+```
+
+After these you will have the .spice file as shown in the fig.
+![Spice extraction](./Images/ext.png)
+
+Open up the spice file and make a couple of changes accordingly
+![Spice file after necessary changes](./Images/spice-file.png)
+
+
+Now we need to run it onto ngspice, by ploting the y vs time while sweeping the input a. You will get a waveform such as following.
+![Spice file after necessary changes](./Images/spice-sim.png)
