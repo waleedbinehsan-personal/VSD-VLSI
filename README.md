@@ -22,6 +22,10 @@
     * Doing Spice simulation to chek if the invertor is make properly
     * Pluging the invertor into OpenLANE flow
 
+### Day 4:
+* Making a LEF file from magic
+* Intergration the LEF into openLANE
+
 
 ___
 ## Day 1:
@@ -157,3 +161,44 @@ Open up the spice file and make a couple of changes accordingly
 
 Now we need to run it onto ngspice, by ploting the y vs time while sweeping the input a. You will get a waveform such as following.
 ![Spice file after necessary changes](./Images/spice-sim.png)
+
+
+
+## Day 4:
+The inverter that we made on day 3 we are going to convert it into LEF and after that we are going to embed it into openLANE flow. First open the .mag file and specify the port as shown below
+![Port declaration](./Images/ports.png)
+Now your ports are ready save it with a respect name using the following command tkcon window
+```
+save sky130_vsdinv.mag
+```
+Then write it into a LEF file using the following command
+```
+lef write <Name of the file you want to save with>
+```
+
+So you will have a .lef file move the .lef and the libs files to the design/src folder your src directory will look something like the following
+![Src Directory](./Images/src_dir.png)
+
+Now change your config.tcl file to include your cell as follows
+![Config file](./Images/config.png)
+
+After this you are set to make the design. Open up docker and go to interactive mode similar to day 1.
+
+After this prep your design. Then enter the following 2 commands
+```
+set lefs [glob $::env(DESIGN_DIR)/src/*.lef]
+add_lefs -src $lefs
+```
+
+After this run synthesis by
+```
+run_synthesis
+```
+
+Your terminal will look something like this
+![Before synthesis](./Images/synth.png)
+
+After running the synthesis your report will have your cell included with in it as shown
+
+![After Synth](./Images/after_snth.png)
+
