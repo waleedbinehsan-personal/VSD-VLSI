@@ -274,3 +274,14 @@ The final GDSII will be as following
 ![Final GDS](./Images/walid2.png)
 ![Final GDS](./Images/magic.png)
 
+
+
+### Final Note
+Thanks everyone especially
+
+* Kunal Ghosh
+* Nickson P Jose
+
+Its was a very hectic, tought, full of learning and amazing 5-day. Hope to interact with all of you in near future. Have a great day.
+:)
+
