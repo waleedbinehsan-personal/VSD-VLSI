@@ -25,7 +25,13 @@
 ### Day 4:
 * Making a LEF file from magic
 * Intergration the LEF into openLANE
+* Reducing the slew in the PnR flow
 
+### Day 5:
+* Power distribution network
+* Routing
+* DRC
+* GDSII
 
 ___
 ## Day 1:
@@ -167,10 +173,12 @@ Now we need to run it onto ngspice, by ploting the y vs time while sweeping the 
 ## Day 4:
 The inverter that we made on day 3 we are going to convert it into LEF and after that we are going to embed it into openLANE flow. First open the .mag file and specify the port as shown below
 ![Port declaration](./Images/ports.png)
+
 Now your ports are ready save it with a respect name using the following command tkcon window
 ```
 save sky130_vsdinv.mag
 ```
+
 Then write it into a LEF file using the following command
 ```
 lef write <Name of the file you want to save with>
@@ -201,4 +209,68 @@ Your terminal will look something like this
 After running the synthesis your report will have your cell included with in it as shown
 
 ![After Synth](./Images/after_snth.png)
+
+
+After the iterating the PnR flow I got the slew as shown in figure
+![Slew after synthesis](./Images/slew.png)
+
+Now, run floor-plan by running the following command. By using the following command
+```
+run_floorplan
+```
+
+Now, run placement by running the following command. By using the following command
+```
+run_placement
+```
+
+Now lets build a clock tree synthesis, by running the following command
+```
+run_cts
+```
+A window such as the following will show up
+![Post CTS](./Images/post-cts.png)
+
+Now, lets start openroad and start the timing analysis. This is done by the following commands
+```
+read_db pico_sv_cts.db
+read_verilog <Absolute path where your verilog is>
+read_liberty -max $::env(LIB_MAX)
+read_sdc <sdc in your src folder>
+```
+
+We got the slack as shown in fig
+![Slack](./Images/slack.png)
+
+Now we need to do ECO to remove paths where slack is the most.
+
+The slack violation of hold time is shown below in fig
+![Hold time violation](./Images/htime.png)
+
+In order to replace a cell from the netlist we can use the following command
+```
+echo $::env(CTS_CLK_BUFFER_LIST)
+lreplace $::env(CTS_CLK_BUFFER_LIST) <Name of buffer> <Buffer to replace with>
+
+set ::env(CTS_CLK_BUFFER_LIST) [lreplace $::env(CTS_CLK_BUFFER_LIST) <Name of buffer> <Buffer to replace with>]
+```
+
+## Day 5:
+In openlane PDN is done after CTS, this is done by using the following command
+```
+gen_pdn
+```
+
+### Routing:
+Now the final step to route all of it together, run the following command
+```
+run_routing
+```
+
+After routing DRC's are checked and then parasatics are removed by SPEC.
+
+The final GDSII will be as following
+![Final GDS](./Images/walid1.png)
+![Final GDS](./Images/walid2.png)
+![Final GDS](./Images/magic.png)
 
